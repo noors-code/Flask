@@ -1,19 +1,22 @@
-<!-- templates/result.html -->
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prediction Result</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Prediction Result</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; text-align: center; }
+        h1 { color: #333; }
+        .result { background: #e8f5e9; padding: 30px; border-radius: 10px; margin: 20px 0; }
+        .price { font-size: 36px; color: #2e7d32; font-weight: bold; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-  <main class="container">
-    <section class="card result-card">
-      <h2>Predicted Price</h2>
-      <p class="price">PKR {{ prediction }}</p>
-      <a class="btn secondary" href="{{ url_for('index') }}">Back</a>
-    </section>
-  </main>
+    <h1>🎯 Price Prediction</h1>
+    <div class="result">
+        <p>Estimated House Price:</p>
+        <p class="price">PKR {{ "{:,.0f}".format(prediction) }}</p>
+    </div>
+    <a href="/">← Make Another Prediction</a>
 </body>
 </html>

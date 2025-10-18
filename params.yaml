@@ -1,15 +1,39 @@
-# params.yaml
+# params.yaml - House Price Prediction Pipeline Parameters
+
 prepare:
+  input_file: data/house_price_pakistan.csv
+  output_file: data/cleaned_house_data.csv
   random_seed: 42
+  # Columns to use for prediction
+  numeric_features:
+    - bedrooms
+    - baths
+    - latitude
+    - longitude
+    - Area Size
+  categorical_features:
+    - property_type
+    - city
+    - province_name
+    - Area Type
+  target: price
 
 features:
   test_size: 0.2
   random_state: 42
 
 train:
+  model_type: RandomForestRegressor
   n_estimators: 100
-  max_depth: 5
+  max_depth: 20
+  min_samples_split: 5
+  min_samples_leaf: 2
   random_state: 42
+  n_jobs: -1
 
 evaluate:
-  average: macro
+  metrics:
+    - r2_score
+    - mean_absolute_error
+    - mean_squared_error
+    - root_mean_squared_error

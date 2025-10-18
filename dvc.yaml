@@ -1,46 +1,52 @@
 stages:
   prepare:
-    cmd: python src/prepare.py --out_dir data
-    outs:
-      - data/iris.csv
+    cmd: python src/prepare_house.py --params params.yaml
+    deps:
+      - data/house_price_pakistan.csv
+      - src/prepare_house.py
     params:
-      - prepare.random_seed
+      - prepare
+    outs:
+      - data/cleaned_house_data.csv
 
   features:
-    cmd: python src/features.py --in_csv data/iris.csv --out_dir data --test_size ${features.test_size} --random_state ${features.random_state}
+    cmd: python src/features_house.py --params params.yaml
     deps:
-      - data/iris_dataset.csv
-      - src/features.py
+      - data/cleaned_house_data.csv
+      - src/features_house.py
+    params:
+      - prepare
+      - features
     outs:
       - data/X_train.npy
       - data/X_test.npy
       - data/y_train.npy
       - data/y_test.npy
-    params:
-      - features.test_size
-      - features.random_state
+      - models/label_encoders.pkl
+      - models/model_features.pkl
+      - models/feature_field_map.pkl
 
   train:
-    cmd: python src/train.py --data_dir data --model_out model.pkl
+    cmd: python src/train_house.py --params params.yaml
     deps:
       - data/X_train.npy
       - data/y_train.npy
-      - src/train.py
-    outs:
-      - model.pkl
+      - src/train_house.py
+      - models/model_features.pkl
     params:
-      - train.n_estimators
-      - train.max_depth
-      - train.random_state
+      - train
+    outs:
+      - models/house_price_model.pkl
 
   evaluate:
-    cmd: python src/evaluate.py --data_dir data --model model.pkl --out metrics/eval.json
+    cmd: python src/evaluate_house.py --params params.yaml
     deps:
-      - model.pkl
+      - models/house_price_model.pkl
       - data/X_test.npy
       - data/y_test.npy
-      - src/evaluate.py
-    outs:
-      - metrics/eval.json
+      - src/evaluate_house.py
     params:
-      - evaluate.average
+      - evaluate
+    metrics:
+      - metrics/eval.json:
+          cache: false
