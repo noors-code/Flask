@@ -42,6 +42,8 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 def index():
     # Feature-login: Added user authentication check
     print("Login feature: Checking user authentication")
+    # Feature-dashboard: Added analytics tracking
+    print("Dashboard feature: Loading analytics data")
     return render_template("index.html", feature_meta=feature_meta)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -54,6 +56,18 @@ def login():
         # Authentication logic here
         return redirect(url_for("index"))
     return render_template("login.html")
+
+@app.route("/dashboard", methods=["GET"])
+def dashboard():
+    """Admin dashboard route added by dashboard team"""
+    print("Dashboard route accessed")
+    # Load statistics and analytics
+    stats = {
+        "total_predictions": 100,
+        "avg_price": 50000000,
+        "active_users": 25
+    }
+    return render_template("dashboard.html", stats=stats)
 
 @app.route("/predict", methods=["POST"])
 def predict():
