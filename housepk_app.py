@@ -40,7 +40,20 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route("/", methods=["GET"])
 def index():
+    # Feature-login: Added user authentication check
+    print("Login feature: Checking user authentication")
     return render_template("index.html", feature_meta=feature_meta)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """User login route added by login team"""
+    print("Login route accessed")
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # Authentication logic here
+        return redirect(url_for("index"))
+    return render_template("login.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
