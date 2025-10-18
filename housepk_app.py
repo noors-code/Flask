@@ -40,7 +40,21 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", feature_meta=feature_meta)
+    # Feature-api: Added API documentation link
+    print("API feature: Serving homepage with API docs link")
+    return render_template("index.html", feature_meta=feature_meta, api_docs="/api/docs")
+
+@app.route("/api/docs", methods=["GET"])
+def api_docs():
+    """API documentation route added by API team"""
+    print("API docs route accessed")
+    docs = {
+        "endpoints": [
+            {"path": "/api/predict", "method": "POST", "description": "Predict house price"},
+            {"path": "/api/health", "method": "GET", "description": "Check API health"}
+        ]
+    }
+    return docs
 
 @app.route("/predict", methods=["POST"])
 def predict():
